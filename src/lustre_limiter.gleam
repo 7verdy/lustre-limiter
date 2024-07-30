@@ -22,15 +22,16 @@ pub type Limiter(msg) =
 // API ------------------------------------------------------------------------
 
 /// Create a new debounce limiter.
+/// 
 /// The way a debounce limiter works is by waiting for a certain amount of time
 /// after the last input before processing all the messages that were received.
+/// 
 /// You can imagine this as a waiter in a restaurant. He waits as long as someone is talking
 /// and only when everyone has stopped talking for a certain amount of time,
 /// he walks to the kitchen to place the order.
-/// See 'Debounce vs Throttle: Definitive Visual Guide'[1] by Artem Zakharchenko
-/// for a more detailed explanation.
 /// 
-/// [1]: https://kettanaito.com/blog/debounce-vs-throttle
+/// See ['Debounce vs Throttle: Definitive Visual Guide'](https://kettanaito.com/blog/debounce-vs-throttle) by Artem Zakharchenko
+/// for a more detailed explanation.
 /// 
 /// ## Example:
 /// ```gleam
@@ -66,14 +67,13 @@ pub fn debounce(tagger: fn(Msg(msg)) -> msg, delay: Int) -> Limiter(msg) {
 }
 
 /// Create a new throttle limiter.
+/// 
 /// Compared to a debouncer, the throttle acts as a valve, letting only one message
 /// through every `interval` milliseconds. This means that if you have a burst of messages
 /// coming in, the throttle will only let the first one through and then ignore the rest.
-/// See 'Debounce vs Throttle: Definitive Visual Guide'[1] by Artem Zakharchenko
+/// 
+/// See ['Debounce vs Throttle: Definitive Visual Guide'](https://kettanaito.com/blog/debounce-vs-throttle) by Artem Zakharchenko
 /// for a more detailed explanation.
-/// 
-/// [1]: https://kettanaito.com/blog/debounce-vs-throttle
-/// 
 /// 
 /// ## Example:
 /// ```gleam
@@ -108,9 +108,11 @@ pub fn throttle(tagger: fn(Msg(msg)) -> msg, interval: Int) -> Limiter(msg) {
 }
 
 /// Push a message into the limiter.
+/// 
 /// While we want to limit any action linked to an event - for example, fetching resources
 /// on the backend when the user types in a search bar - we don't want to limit the events
 /// themselves, otherwise we risk losing the user's input.
+/// 
 /// To circumvent this, and to not make requests on every keypress, this function is used
 /// to manually push a message into the limiter.
 /// 
@@ -152,6 +154,7 @@ pub fn push(msg: msg, limiter: Limiter(msg)) -> #(Limiter(msg), Effect(msg)) {
 }
 
 /// Update the limiter.
+/// 
 /// The limiter works using its own `Msg` values to update its internal state.
 /// When you create a limiter, you need to provide a "tagger" function that wraps these
 /// internal messages into a type that the Lustre `update` function can understand.
