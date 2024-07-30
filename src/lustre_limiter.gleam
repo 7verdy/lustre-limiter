@@ -33,7 +33,7 @@ pub type Limiter(msg) =
 /// [1]: https://kettanaito.com/blog/debounce-vs-throttle
 /// 
 /// ## Example:
-/// ```
+/// ```gleam
 /// pub opaque type Model {
 ///   Model(
 ///      value: String,
@@ -57,10 +57,6 @@ pub type Limiter(msg) =
 /// }
 /// ```
 /// 
-/// @param tagger The Lustre `Msg` that will be dispatched after the cooldown time.
-/// @param delay The time in milliseconds to wait after the last message before dispatching.
-/// @returns A new debounce limiter.
-/// 
 pub fn debounce(tagger: fn(Msg(msg)) -> msg, delay: Int) -> Limiter(msg) {
   Limiter(
     tagger: tagger,
@@ -80,7 +76,7 @@ pub fn debounce(tagger: fn(Msg(msg)) -> msg, delay: Int) -> Limiter(msg) {
 /// 
 /// 
 /// ## Example:
-/// ```
+/// ```gleam
 /// pub opaque type Model {
 ///   Model(
 ///     value: String,
@@ -103,10 +99,6 @@ pub fn debounce(tagger: fn(Msg(msg)) -> msg, delay: Int) -> Limiter(msg) {
 /// }
 /// ```
 /// 
-/// @param tagger The Lustre `Msg` that will be dispatched after the cooldown time.
-/// @param interval The time in milliseconds to wait before dispatching the next message.
-/// @returns A new throttle limiter.
-/// 
 pub fn throttle(tagger: fn(Msg(msg)) -> msg, interval: Int) -> Limiter(msg) {
   Limiter(
     tagger: tagger,
@@ -123,7 +115,7 @@ pub fn throttle(tagger: fn(Msg(msg)) -> msg, interval: Int) -> Limiter(msg) {
 /// to manually push a message into the limiter.
 /// 
 /// ## Example:
-/// ```
+/// ```gleam
 /// pub fn update(model: Model, msg: Msg) -> #(Model, effect.Effect(Msg)) {
 ///   case msg {
 ///     GetInput(value) -> {
@@ -136,10 +128,6 @@ pub fn throttle(tagger: fn(Msg(msg)) -> msg, interval: Int) -> Limiter(msg) {
 ///   }
 /// }
 /// ```
-/// 
-/// @param msg The message to push into the limiter.
-/// @param limiter The limiter to push the message into.
-/// @returns A tuple with the new limiter and an effect that will resolve if the message was allowed through.
 /// 
 pub fn push(msg: msg, limiter: Limiter(msg)) -> #(Limiter(msg), Effect(msg)) {
   case limiter.state, limiter.mode {
@@ -172,7 +160,7 @@ pub fn push(msg: msg, limiter: Limiter(msg)) -> #(Limiter(msg), Effect(msg)) {
 /// a "wrapper" message from the limiter. (i.e. `DebounceMsg` or `ThrottleMsg`).
 /// 
 /// ## Example:
-/// ```
+/// ```gleam
 /// pub fn update(model: Model, msg: Msg) -> #(Model, effect.Effect(Msg)) {
 ///   case msg {
 ///    ...
@@ -184,9 +172,6 @@ pub fn push(msg: msg, limiter: Limiter(msg)) -> #(Limiter(msg), Effect(msg)) {
 /// }
 /// ```
 /// 
-/// @param internal_msg The internal message from the limiter, wrapped in a Lustre `Msg`.
-/// @param limiter The limiter to update.
-/// @returns A tuple with the new limiter and an effect. In our case, the effect would be the message `SearchFor`.
 pub fn update(
   internal_msg: Msg(msg),
   limiter: Limiter(msg),
